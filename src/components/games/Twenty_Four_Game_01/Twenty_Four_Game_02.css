@@ -1,0 +1,172 @@
+/* =====================
+   Container
+   ===================== */
+.tfour-container {
+  background: #fff;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #222;
+}
+
+/* =====================
+   Header + Buttons
+   ===================== */
+.tfour-container h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.tfour-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.tfour-buttons button {
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.tfour-buttons button:hover {
+  transform: scale(1.05);
+  opacity: 0.85;
+}
+
+/* =====================
+   Collapsible Boxes
+   ===================== */
+.tfour-box {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0.8rem 0;
+  background: #f9f9f9;
+}
+
+.tfour-box h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* =====================
+   Numbers Grid
+   ===================== */
+.tfour-numbers {
+  margin: 1rem auto;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.tfour-numbers.layout-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.tfour-numbers.layout-horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.tfour-numbers.layout-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.tfour-numbers.layout-compact {
+  display: flex;
+  flex-direction: row;
+  gap: 0.3rem;
+  font-size: 1rem;
+}
+
+.tfour-number {
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* =====================
+   Operator Setup
+   ===================== */
+.operator-setup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.operator-config {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.operator-config button {
+  border: none;
+  padding: 0.35rem 0.65rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.operator-config button:hover {
+  transform: scale(1.05);
+}
+
+.operators-display {
+  margin-top: 0.4rem;
+  font-size: 1.3rem;
+}
+
+/* =====================
+   Form + Solution
+   ===================== */
+.tfour-form {
+  margin-top: 1rem;
+}
+
+.tfour-form textarea {
+  width: 100%;
+  height: 80px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.tfour-message {
+  margin-top: 0.5rem;
+  font-weight: bold;
+  min-height: 1.2rem;
+}
+
+/* =====================
+   Utility
+   ===================== */
+label {
+  display: block;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+select,
+input[type="color"],
+input[type="text"],
+input[type="checkbox"] {
+  margin-left: 0.5rem;
+}

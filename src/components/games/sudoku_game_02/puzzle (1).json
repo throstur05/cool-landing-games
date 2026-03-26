@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "shapeId": "spiral",
+  "modeId": "symmetryMode",
+  "targetSum": null,
+  "cells": [
+    {
+      "spiralIdx": 0
+    },
+    {
+      "spiralIdx": 1
+    },
+    {
+      "spiralIdx": 2
+    },
+    {
+      "spiralIdx": 3
+    },
+    {
+      "spiralIdx": 4
+    },
+    {
+      "spiralIdx": 5
+    },
+    {
+      "spiralIdx": 6
+    },
+    {
+      "spiralIdx": 7
+    },
+    {
+      "spiralIdx": 8
+    },
+    {
+      "spiralIdx": 9
+    },
+    {
+      "spiralIdx": 10
+    },
+    {
+      "spiralIdx": 11
+    },
+    {
+      "spiralIdx": 12
+    },
+    {
+      "spiralIdx": 13
+    },
+    {
+      "spiralIdx": 14
+    },
+    {
+      "spiralIdx": 15
+    }
+  ],
+  "lines": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      1,
+      2,
+      3
+    ],
+    [
+      2,
+      3,
+      4
+    ],
+    [
+      3,
+      4,
+      5
+    ],
+    [
+      4,
+      5,
+      6
+    ],
+    [
+      5,
+      6,
+      7
+    ],
+    [
+      6,
+      7,
+      8
+    ],
+    [
+      7,
+      8,
+      9
+    ],
+    [
+      8,
+      9,
+      10
+    ],
+    [
+      9,
+      10,
+      11
+    ],
+    [
+      10,
+      11,
+      12
+    ],
+    [
+      11,
+      12,
+      13
+    ],
+    [
+      12,
+      13,
+      14
+    ],
+    [
+      13,
+      14,
+      15
+    ]
+  ],
+  "puzzle": [
+    23,
+    11,
+    "?",
+    11,
+    5,
+    23,
+    5,
+    "?",
+    "?",
+    5,
+    "?",
+    "?",
+    23,
+    17,
+    23,
+    "?"
+  ],
+  "fixed": [
+    true,
+    true,
+    false,
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false
+  ],
+  "title": "Spiral · Symmetry",
+  "notes": "",
+  "createdAt": "2026-03-22T20:14:03.996Z"
+}

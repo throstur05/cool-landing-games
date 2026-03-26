@@ -1,0 +1,327 @@
+/* ===============================
+   MahjongTilesGame_1.css  (v8+)
+   =============================== */
+
+/* Base + variables from JSX style props */
+.mahjong-game-root {
+  --tile-w: 52px;
+  --tile-h: 76px;
+  --tile-face: 26px;
+  --ui-font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --tile-font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  color: #111;
+  background: #fff;           /* default: white background */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  font-family: var(--ui-font);
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: #ffffffee;
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid #e6e6e6;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.center-top { flex: 1 1 auto; }
+.right-top { display: flex; gap: 8px; }
+.status { display: flex; gap: 16px; font-size: 14px; color:#333; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  appearance: none;
+  border: 1px solid #d0d0d0;
+  background: #f7f7f7;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+  transition: background .15s, box-shadow .15s, border-color .15s;
+}
+.btn:hover { background:#fff; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
+.btn.danger { background:#ffe9e9; border-color:#ffb6b6; color:#a40000; }
+.btn.subtle { background:#f3f5f8; border-color:#e2e6ec; }
+
+/* ---------- Main board layout ---------- */
+.board {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+.board > section {
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.03);
+}
+.board h3 { margin: 0 0 8px; font-size: 16px; }
+.score { margin-top: 8px; font-weight: 600; }
+
+/* Rows for hands / discard */
+.you-row, .ai-row, .discard-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+/* ---------- Tiles ---------- */
+.tile, .tile-face, .tile-face canvas { box-sizing: border-box; }
+
+.tile {
+  width: var(--tile-w);
+  height: var(--tile-h);
+  flex: 0 0 var(--tile-w);
+  background: linear-gradient(#fff, #fbfbfb);
+  border: 1px solid #d9d9d9;
+  border-radius: 12px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.08);
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  position: relative;
+  overflow: hidden; /* safety */
+}
+.tile.selected { outline: 2px solid #5aa7ff; }
+.tile.disabled { opacity: .75; pointer-events: none; }
+
+.tile-top, .tile-bot {
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  font-size: 12px;
+  font-family: var(--tile-font);
+  white-space: nowrap;
+  overflow: hidden;
+  color: #333;
+}
+
+.tile-face {
+  width: 100%;
+  height: calc(100% - 36px); /* top + bottom label */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;          /* must clip canvas inside */
+  border-radius: 10px;
+  padding: 2px;
+}
+.tile-face img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+.tile-face canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Optional Glow FX (toggled via settings.glowFX by adding 'playable' class) */
+.tile.playable { box-shadow: 0 0 12px 2px rgba(25, 140, 255, 0.65); }
+.tile.selected.playable { box-shadow: 0 0 12px 2px rgba(0, 210, 120, 0.75); }
+
+/* Suit accent borders (for glyph sets) */
+.s-character { border-color: var(--s-char, #a86b3e); }
+.s-bamboo    { border-color: var(--s-bamboo, #138a3a); }
+.s-dot       { border-color: var(--s-dot, #1b6dd6); }
+.s-wind      { border-color: var(--s-wind, #7b5bd6); }
+.s-dragon    { border-color: var(--s-dragon, #d64545); }
+.s-joker     { border-color: var(--s-joker, #f1a300); }
+
+/* Hidden tile back (for AI) — place a div.tile-back inside .tile-face */
+.tile-back {
+  position: absolute;
+  inset: 2px;
+  border-radius: 8px;
+}
+.tile-back.plain { background:#ddd; }
+.tile-back.pattern1 {
+  background: repeating-linear-gradient(45deg, #eaeaea 0 10px, #dcdcdc 10px 20px);
+}
+.tile-back.pattern2 {
+  background: radial-gradient(circle at 20% 30%, #cfcfcf 0 20%, transparent 21%),
+              radial-gradient(circle at 70% 60%, #cfcfcf 0 20%, transparent 21%),
+              #e6e6e6;
+}
+
+/* ---------- Melds ---------- */
+.melds { margin-top: 10px; }
+.meld-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.meld {
+  display: flex; align-items: center; gap: 4px;
+  padding: 6px; border: 1px dashed #ddd; border-radius: 10px;
+  background: #fafafa;
+}
+.meld-tag {
+  margin-left: 4px; font-size: 12px; color:#555; background:#eef3ff;
+  border:1px solid #dbe7ff; border-radius: 6px; padding:2px 6px;
+}
+
+/* ---------- Teaching Aids ---------- */
+.teaching { margin-top: 10px; }
+.teaching h4 { margin: 0 0 6px; }
+.aid-section { background:#f9fbff; border:1px solid #e6efff; border-radius:10px; padding:8px; margin-top:8px; }
+.aid-meld { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:4px 0; }
+.turn-hints { margin-top: 6px; color:#444; font-size: 14px; }
+
+/* ---------- Log ---------- */
+.log-area .log-scroll {
+  max-height: 220px;
+  overflow: auto;
+  background: #fcfcfc;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 6px;
+  font-size: 13px;
+}
+.log-line { padding: 2px 0; white-space: nowrap; }
+
+/* ---------- Modals (right pinned with V+H scroll) ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0,0,0,.18);
+  display: flex;
+  justify-content: flex-end;  /* pin panel to right */
+  align-items: stretch;
+}
+.modal-inner {
+  width: min(560px, 94vw);
+  background: #fff;
+  border-left: 1px solid #e9e9e9;
+  box-shadow: -4px 0 16px rgba(0,0,0,.15);
+  display: flex;
+  flex-direction: column;
+}
+.modal-inner h2 { margin: 14px 14px 8px; }
+.modal-scroll {
+  flex: 1 1 auto;
+  overflow: auto;            /* vertical AND horizontal */
+  padding: 0 14px 14px;
+}
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 12px 14px;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+}
+
+/* Force horizontal scroll content areas */
+.modal-wide { min-width: 900px; }        /* New Game form area */
+.rules-scroll { overflow: auto; }
+.rules-wide { min-width: 1100px; }       /* Big table for rules */
+
+/* Forms */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+.form-grid label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.form-grid input[type="number"],
+.form-grid input[type="text"],
+.form-grid input[type="color"],
+.form-grid select {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+.form-grid input[type="range"] { width: 100%; }
+.checkrow { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.remember-row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+
+/* Color picker palette */
+.colors-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.color-palette {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+.color-swatch {
+  width: 100%;
+  padding-bottom: 100%;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+}
+
+/* ---------- Gameover banner ---------- */
+.gameover-banner {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 9;
+  display: flex; align-items: center; justify-content: center;
+}
+.banner-inner {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 20px;
+  min-width: 260px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+}
+
+/* ---------- Background Themes (optional assets) ---------- */
+/* Supply your own /themes/*.jpg or keep the solid fallbacks */
+.theme-wood { background: #f7f3ea url('/themes/wood.jpg') center/cover, #f7f3ea; }
+.theme-felt { background: radial-gradient(120% 120% at 50% -10%, #0b7e2b, #024d1a 70%, #013812 100%); }
+.theme-marble { background: #f7f7f7 url('/themes/marble.jpg') center/cover, #f7f7f7; }
+.theme-galaxy { background: #0a0f2b url('/themes/galaxy.jpg') center/cover, #0a0f2b; color:#f2f6ff; }
+.theme-bamboo { background: #f7fff4 url('/themes/bamboo.jpg') center/cover, #f7fff4; }
+
+/* Ensure content remains readable on dark themes */
+.theme-galaxy .board > section { background:#0e1436; border-color:#20285f; color:#e6eaff; }
+.theme-galaxy .btn { background:#1a2150; border-color:#2a3783; color:#e6eaff; }
+.theme-galaxy .log-area .log-scroll { background:#0d1333; border-color:#242b5e; }
+
+/* ---------- Tables inside Rules ---------- */
+.ref-table {
+  border-collapse: collapse;
+  min-width: 800px;
+  background:#fff;
+}
+.ref-table th, .ref-table td {
+  border:1px solid #e5e5e5;
+  padding:8px 10px;
+  text-align:left;
+  font-size:14px;
+}
+.ref-table thead th { background:#f5f7fb; }
+
+/* ---------- Responsive tweaks ---------- */
+@media (min-width: 1080px) {
+  .board {
+    grid-template-columns: 1.1fr 0.9fr;
+    grid-auto-rows: minmax(min-content, max-content);
+  }
+  .discard-area { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .modal-inner { width: 100vw; }
+}

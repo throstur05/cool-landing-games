@@ -1,0 +1,63 @@
+.cool-landing {
+  background: white;          /* white background for contrast */
+  color: black;               /* all text black by default */
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;         /* ensures children stack correctly */
+  z-index: 1;
+  overflow: visible;          /* don’t clip child components */
+}
+
+.cool-landing h1,
+.cool-landing h2,
+.cool-landing h3 {
+  color: #111;                /* dark headers */
+  margin-bottom: 1rem;
+}
+
+.cool-landing button {
+  background: #007bff;        /* blue buttons */
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  margin: 0.4rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  z-index: 2;
+  position: relative;         /* ensure buttons are clickable */
+}
+
+.cool-landing button:hover {
+  background: #0056b3;
+}
+
+.cool-landing button:active {
+  background: #003f7f;
+}
+
+.cool-landing .game-area {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  min-height: 200px;
+  overflow-y: auto;           /* scroll if content is tall */
+  z-index: 1;
+  position: relative;
+}
+
+.cool-landing ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.cool-landing li {
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+  color: #222;
+}

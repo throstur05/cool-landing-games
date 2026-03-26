@@ -1,0 +1,225 @@
+/* ============================================================
+   TangramTilesGame_2.css  –  Clean modern · playful · elegant
+   ============================================================ */
+
+/* ── Google Font import (fallback: system fonts) ── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ── Fade-in for toast ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);     }
+}
+
+@keyframes snapPulse {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* ── Root ── */
+.tangram-root {
+  background: #F8FAFC;
+  color: #111827;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Bars ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  border-bottom: 1px solid #E5E7EB;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+}
+
+.tracebar, .sizebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 7px 16px;
+  border-bottom: 1px dashed #E5E7EB;
+  background: #FEFEFE;
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+  white-space: nowrap;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.btn:hover:not(:disabled) { background: #F3F4F6; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.primary  { background: #4F46E5; color: #fff; border-color: #4338CA; }
+.btn.primary:hover:not(:disabled) { background: #4338CA; }
+.btn.danger   { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+.btn.danger:hover:not(:disabled)  { background: #FEE2E2; }
+.btn.active   { background: #EEF2FF; color: #4F46E5; border-color: #C7D2FE; }
+
+/* ── Pills (Moves, Time) ── */
+.pill {
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #6B7280;
+  white-space: nowrap;
+}
+
+/* ── Progress bar ── */
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.progress-track {
+  width: 100px;
+  height: 8px;
+  background: #E5E7EB;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(.22,1,.36,1);
+}
+
+/* ── Board wrapper ── */
+.board-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+  background: #F8FAFC;
+  position: relative;
+}
+
+/* ── SVG Board ── */
+.board-svg {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.08);
+  user-select: none;
+  -webkit-user-drag: none;
+  touch-action: none;
+  display: block;
+}
+
+/* ── Toast ── */
+.toast {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  animation: fadeIn 0.2s ease;
+  z-index: 100;
+}
+.toast.info    { background: rgba(17,24,39,0.9); }
+.toast.success { background: #059669; }
+.toast.error   { background: #DC2626; }
+
+/* ── Importer ── */
+.book-import {
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  background: #FAFAFA;
+  margin: 8px 12px;
+  font-size: 13px;
+}
+.book-import summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 700;
+  color: #374151;
+}
+.book-import summary:hover { background: #F3F4F6; border-radius: 12px; }
+
+/* ── Rules Modal ── */
+.rules-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.6);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+.rules-card {
+  background: #fff;
+  width: min(900px, 92vw);
+  height: min(580px, 86vh);
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.rules-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.rules-body {
+  overflow: auto;
+  padding: 20px 24px;
+  flex: 1;
+}
+
+/* ── Snap highlight pulse on board ── */
+.snapped-glow {
+  animation: snapPulse 1.5s ease-in-out infinite;
+}
+
+/* ── Input / select focus ring ── */
+select:focus,
+input[type=number]:focus,
+input[type=range]:focus {
+  outline: none;
+  border-color: #6366F1 !important;
+  box-shadow: 0 0 0 2px rgba(99,102,241,.15);
+}
+
+/* ── Range sliders ── */
+input[type=range] {
+  accent-color: #6366F1;
+  cursor: pointer;
+}
+
+/* ── Divider ── */
+.vdivider {
+  width: 1px;
+  height: 24px;
+  background: #E5E7EB;
+  flex-shrink: 0;
+}

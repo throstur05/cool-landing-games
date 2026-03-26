@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; background: #f7f5f0; color: #1a1a1a; font-family: 'DM Sans', system-ui, sans-serif; }
+
+.app-root { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 48px 20px 32px; }
+
+.app-hero { text-align: center; margin-bottom: 48px; }
+.app-hero-icon { font-size: 52px; display: block; margin-bottom: 12px; }
+.app-hero h1 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(28px, 5vw, 46px); font-weight: 900; color: #0f0f0f; letter-spacing: -1px; }
+.app-hero p { font-size: 16px; color: #6b7280; margin-top: 8px; }
+
+.app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; width: 100%; max-width: 980px; }
+
+.app-card {
+  background: #fff; border: 1.5px solid #e5e7eb; border-radius: 18px;
+  padding: 24px; text-align: left; cursor: pointer;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: transform .15s, box-shadow .15s, border-color .15s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.app-card:hover { transform: translateY(-4px); border-color: var(--a); box-shadow: 0 8px 28px rgba(0,0,0,.1); }
+
+.app-icon { font-size: 36px; width: 56px; height: 56px; border-radius: 14px; background: color-mix(in srgb, var(--a) 10%, #fff); display: flex; align-items: center; justify-content: center; }
+.app-card-body { flex: 1; }
+.app-card-title { font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 700; color: #0f0f0f; }
+.app-card-sub { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--a); margin: 3px 0 10px; }
+.app-card-desc { font-size: 13px; color: #6b7280; line-height: 1.6; }
+.app-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+.app-tag { background: #f3f4f6; border-radius: 999px; padding: 3px 10px; font-size: 11px; color: #6b7280; }
+.app-cta { font-size: 13px; font-weight: 600; color: var(--a); }
+
+.app-footer { margin-top: 40px; font-size: 12px; color: #9ca3af; }
