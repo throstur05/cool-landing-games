@@ -1,63 +1,317 @@
-.cool-landing {
-  background: white;          /* white background for contrast */
-  color: black;               /* all text black by default */
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;         /* ensures children stack correctly */
-  z-index: 1;
-  overflow: visible;          /* don’t clip child components */
+/* =============================================
+   COOL LANDING — Dark Arcade Lounge Theme
+   Fonts: Bebas Neue (display) + DM Sans (body)
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ── Reset & Root ─────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0b14;
+  --surface:   #12141f;
+  --surface2:  #1a1d2e;
+  --border:    rgba(255,255,255,0.07);
+  --gold:      #f0c060;
+  --gold-dim:  #a07830;
+  --text:      #e8eaf0;
+  --text-muted:#7a7f9a;
+  --accent:    #6366f1;
+  --radius:    16px;
+  --card-w:    260px;
 }
 
-.cool-landing h1,
-.cool-landing h2,
-.cool-landing h3 {
-  color: #111;                /* dark headers */
+/* ── Wrapper ──────────────────────────────── */
+.cl-root {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  padding: 3rem 2rem 4rem;
+  position: relative;
+  overflow-x: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.cl-root.cl-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Background Orbs ──────────────────────── */
+.cl-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.25;
+}
+.cl-orb1 { width: 600px; height: 600px; background: #3b3fd8; top: -200px; left: -150px; animation: orbFloat 14s ease-in-out infinite; }
+.cl-orb2 { width: 400px; height: 400px; background: #a855f7; top: 40%; right: -120px; animation: orbFloat 18s ease-in-out infinite reverse; }
+.cl-orb3 { width: 350px; height: 350px; background: #f59e0b; bottom: -100px; left: 30%; animation: orbFloat 20s ease-in-out infinite 3s; }
+
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-30px) scale(1.05); }
+}
+
+/* ── Header ───────────────────────────────── */
+.cl-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cl-logo-mark {
+  font-size: 2rem;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: spin 12s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.cl-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 10vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.cl-title-cool {
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(240,192,96,0.4);
+}
+.cl-title-landing {
+  color: var(--text);
+  opacity: 0.9;
+}
+
+.cl-subtitle {
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Controls ─────────────────────────────── */
+.cl-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cl-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cl-search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+.cl-search {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.2rem 0.6rem 2.6rem;
+  width: 240px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cl-search::placeholder { color: var(--text-muted); }
+.cl-search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+.cl-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cl-filter-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.45rem 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.03em;
+}
+.cl-filter-btn:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+.cl-filter-active {
+  background: var(--surface2) !important;
+  color: var(--text) !important;
+  border-color: var(--accent) !important;
+}
+
+/* ── Game Grid ────────────────────────────── */
+.cl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+  gap: 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Card ─────────────────────────────────── */
+.cl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: cardIn 0.5s ease both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cl-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+.cl-card:hover .cl-card-glow {
+  opacity: 0.12;
+}
+.cl-card:hover .cl-card-play {
+  opacity: 1;
+  transform: translateX(0);
+}
+.cl-card:active {
+  transform: translateY(-3px) scale(1.01);
+}
+
+.cl-card-inner {
+  padding: 1.4rem 1.4rem 1.2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cl-card-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cl-cat-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid;
+  border-radius: 50px;
+  padding: 0.15rem 0.6rem;
+  margin-bottom: 0.9rem;
+  opacity: 0.85;
+}
+
+.cl-card-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.6rem;
+  display: block;
+  line-height: 1;
+}
+
+.cl-card-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
+}
+
+.cl-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 300;
   margin-bottom: 1rem;
 }
 
-.cool-landing button {
-  background: #007bff;        /* blue buttons */
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  margin: 0.4rem;
-  border-radius: 6px;
+.cl-card-play {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ── Empty State ──────────────────────────── */
+.cl-empty {
+  text-align: center;
+  color: var(--text-muted);
   font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  z-index: 2;
-  position: relative;         /* ensure buttons are clickable */
-}
-
-.cool-landing button:hover {
-  background: #0056b3;
-}
-
-.cool-landing button:active {
-  background: #003f7f;
-}
-
-.cool-landing .game-area {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  min-height: 200px;
-  overflow-y: auto;           /* scroll if content is tall */
-  z-index: 1;
+  margin: 4rem auto;
   position: relative;
+  z-index: 1;
 }
 
-.cool-landing ul {
-  list-style: disc;
-  padding-left: 1.5rem;
+/* ── Footer ───────────────────────────────── */
+.cl-footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 4rem;
+  letter-spacing: 0.06em;
+  position: relative;
+  z-index: 1;
 }
 
-.cool-landing li {
-  margin-bottom: 0.75rem;
-  line-height: 1.4;
-  color: #222;
+/* ── Game Wrapper ─────────────────────────── */
+.cl-game-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Responsive ───────────────────────────── */
+@media (max-width: 600px) {
+  .cl-root { padding: 2rem 1rem 3rem; }
+  :root { --card-w: 100%; }
+  .cl-search { width: 100%; }
+  .cl-controls { flex-direction: column; align-items: stretch; }
 }
