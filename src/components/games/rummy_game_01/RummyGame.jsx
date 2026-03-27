@@ -169,7 +169,7 @@ const Divider = ({label, color='#334155'}) => (
 
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function RummyGame({ onQuit }) {
-  const DEFAULTS = { jokers:2, minMeld:30, aiLevel:5, playerName:'Player', twosWild:false, canStealWild:false, canAddToOpponentMeld:false, handSize:10, sortMode:'suit' };
+  const DEFAULTS = { jokers:2, minMeld:30, aiLevel:5, playerName:'Player', twosWild:false, canStealWild:false, canAddToOpponentMeld:false, handSize:10, sortMode:'suit', canTakeWholePile:false };
 
   /* config — load from localStorage, fall back to defaults */
   const [cfg, setCfg] = useState(() => {
@@ -284,8 +284,8 @@ export default function RummyGame({ onQuit }) {
     setMsg({ main:'Card drawn — form melds, then discard.', sub: makeHint(newHand, cfg.minMeld) });
   }, [phase, gs, cfg.minMeld, makeHint, sort]);
 
-  /* ── Draw from discard ── */
-  const drawDiscard = useCallback(() => {
+  /* ── Draw top card from discard ── */
+  const drawDiscardTop = useCallback(() => {
     if(phase!=='draw'||!gs||!gs.discardPile.length) return;
     const card       = gs.discardPile[gs.discardPile.length-1];
     const newDiscard = gs.discardPile.slice(0,-1);
@@ -293,6 +293,16 @@ export default function RummyGame({ onQuit }) {
     setGs(p=>({ ...p, discardPile:newDiscard, playerHand:newHand }));
     setPhase('meld');
     setMsg({ main:`Took ${card.value}${SUIT_SYM[card.suit]} — form melds, then discard.`, sub: makeHint(newHand, cfg.minMeld) });
+  }, [phase, gs, cfg.minMeld, makeHint, sort]);
+
+  /* ── Take the entire discard pile ── */
+  const drawDiscardAll = useCallback(() => {
+    if(phase!=='draw'||!gs||!gs.discardPile.length) return;
+    const count   = gs.discardPile.length;
+    const newHand = sort([...gs.playerHand, ...gs.discardPile]);
+    setGs(p=>({ ...p, discardPile:[], playerHand:newHand }));
+    setPhase('meld');
+    setMsg({ main:`Took all ${count} cards from the pile! Form melds, then discard.`, sub: makeHint(newHand, cfg.minMeld) });
   }, [phase, gs, cfg.minMeld, makeHint, sort]);
 
   /* ── Toggle select ── */
@@ -370,7 +380,55 @@ export default function RummyGame({ onQuit }) {
     setMsg({ main:'Cards added to AI meld! Keep melding or discard.', sub:'' });
   }, [cfg.canAddToOpponentMeld, phase, gs, selected, showToast, endGame]);
 
-  /* ── AI turn ── */
+  /* ── Add card(s) to own meld ── */
+  const addToOwnMeld = useCallback((meldIdx) => {
+    if(phase!=='meld'||!gs) return;
+    if(selected.length===0){ showToast('✗ Select cards from your hand first, then click your meld to extend it.'); return; }
+    const extended = [...gs.playerMelds[meldIdx], ...selected];
+    if(!isValidMeld(extended)){ showToast('✗ Selected cards don\'t extend that meld validly.'); return; }
+    const ids = new Set(selected.map(c=>c.id));
+    const newMelds = gs.playerMelds.map((m,i)=>i===meldIdx?extended:m);
+    const newHand  = gs.playerHand.filter(c=>!ids.has(c.id));
+    setGs(p=>({ ...p, playerMelds:newMelds, playerHand:newHand }));
+    setSelected([]);
+    showToast(`✓ Extended your meld with ${selected.length} card${selected.length>1?'s':''}!`);
+    if(!newHand.length){ endGame('player', gs.aiHand); return; }
+    setMsg({ main:'Meld extended! Keep melding or discard.', sub: makeHint(newHand, cfg.minMeld) });
+  }, [phase, gs, selected, showToast, endGame, makeHint, cfg.minMeld]);
+
+  /* ── Save / Load / Clear game ── */
+  const SAVE_KEY = 'rummy_saved_game';
+
+  const saveGame = useCallback(() => {
+    if(!gs||phase==='gameover') return;
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ gs, phase, scores }));
+      showToast('✓ Game saved!');
+    } catch { showToast('✗ Could not save game.'); }
+  }, [gs, phase, scores, showToast]);
+
+  const loadGame = useCallback(() => {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if(!raw){ showToast('✗ No saved game found.'); return; }
+      const { gs:savedGs, phase:savedPhase, scores:savedScores } = JSON.parse(raw);
+      setGs(savedGs);
+      setPhase(savedPhase);
+      setScores(savedScores);
+      setSelected([]);
+      setMsg({ main:'Game resumed — your turn!', sub:'' });
+      setModal(null);
+      showToast('✓ Game resumed!');
+    } catch { showToast('✗ Could not load saved game.'); }
+  }, [showToast]);
+
+  const clearSave = useCallback(() => {
+    localStorage.removeItem(SAVE_KEY);
+    showToast('✓ Saved game cleared.');
+  }, [showToast]);
+
+  const hasSave = (() => { try { return !!localStorage.getItem(SAVE_KEY); } catch { return false; } })();
+
   useEffect(() => {
     if(phase!=='ai'||!gs) return;
     aiTimer.current = setTimeout(() => {
@@ -585,6 +643,9 @@ export default function RummyGame({ onQuit }) {
         <Toggle cfgKey="canAddToOpponentMeld"
           label="ADD CARDS TO OPPONENT'S MELDS"
           description="Select cards from your hand, then click an AI meld to extend it." />
+        <Toggle cfgKey="canTakeWholePile"
+          label="TAKE WHOLE DISCARD PILE"
+          description="Instead of drawing just the top card, you can take the entire discard pile into your hand." />
       </div>
 
       {/* Theme toggle */}
@@ -694,6 +755,9 @@ export default function RummyGame({ onQuit }) {
         </div>
         <div style={{ display:'flex', gap:8 }}>
           <button style={btnStyle('gold')} onClick={startGame}>▶ NEW</button>
+          {gs && phase!=='gameover' && (
+            <button style={btnStyle('blue')} onClick={saveGame}>💾 SAVE</button>
+          )}
           <button style={btnStyle('blue')} onClick={()=>setModal('setup')}>⚙ SETUP</button>
           <button style={btnStyle('muted')} onClick={()=>setModal('rules')}>? RULES</button>
           <button style={btnStyle('muted')} onClick={()=>setDarkMode(d=>!d)} title="Toggle theme">
@@ -728,8 +792,19 @@ export default function RummyGame({ onQuit }) {
             <div style={{ fontSize:26, fontWeight:700, color:G,
               fontFamily:'"Courier New",monospace', letterSpacing:4, marginBottom:6 }}>RUMMY</div>
             <div style={{ fontSize:12, color:M, marginBottom:28, letterSpacing:1 }}>Classic card game — be first to empty your hand</div>
+            {hasSave && (
+              <div style={{ ...panelStyle(`${G}55`), marginBottom:20, display:'inline-block', padding:'12px 24px' }}>
+                <div style={{ fontSize:12, color:G, fontFamily:'"Courier New",monospace', marginBottom:10, letterSpacing:1 }}>
+                  💾 SAVED GAME FOUND
+                </div>
+                <div style={{ display:'flex', gap:10, justifyContent:'center' }}>
+                  <button style={btnStyle('gold')} onClick={loadGame}>▶ RESUME</button>
+                  <button style={btnStyle('muted')} onClick={clearSave}>✕ DISCARD</button>
+                </div>
+              </div>
+            )}
             <div style={{ display:'flex', gap:12, justifyContent:'center' }}>
-              <button style={{ ...btnStyle('gold'), fontSize:14, padding:'10px 26px' }} onClick={startGame}>▶ PLAY NOW</button>
+              <button style={{ ...btnStyle('gold'), fontSize:14, padding:'10px 26px' }} onClick={startGame}>▶ NEW GAME</button>
               <button style={btnStyle('blue')} onClick={()=>setModal('setup')}>⚙ SETUP</button>
               <button style={btnStyle('muted')} onClick={()=>setModal('rules')}>? RULES</button>
             </div>
@@ -821,12 +896,21 @@ export default function RummyGame({ onQuit }) {
                   letterSpacing:1.5, marginBottom:6 }}>DISCARD ({gs.discardPile.length})</div>
                 {topDiscard
                   ? <Card key={topDiscard.id} card={topDiscard}
-                      clickable={phase==='draw'} onClick={drawDiscard} size="md"/>
+                      clickable={phase==='draw'} onClick={drawDiscardTop} size="md"/>
                   : <div style={{ width:68, height:98, border:`2px dashed ${PANEL_BORDER}`, borderRadius:8 }}/>
                 }
                 {phase==='draw' && topDiscard && (
-                  <div style={{ fontSize:9, color:B, marginTop:5,
-                    fontFamily:'"Courier New",monospace', letterSpacing:.5 }}>CLICK TO TAKE</div>
+                  <div style={{ marginTop:6, display:'flex', flexDirection:'column', gap:4, alignItems:'center' }}>
+                    <div style={{ fontSize:9, color:B, fontFamily:'"Courier New",monospace', letterSpacing:.5 }}>
+                      CLICK CARD = TOP ONLY
+                    </div>
+                    {cfg.canTakeWholePile && gs.discardPile.length > 1 && (
+                      <button style={{ ...btnStyle('gold'), fontSize:9, padding:'3px 8px' }}
+                        onClick={drawDiscardAll}>
+                        ＋ TAKE ALL {gs.discardPile.length}
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -863,7 +947,19 @@ export default function RummyGame({ onQuit }) {
               {selected.length>0 && <Pill label="selected" value={selected.length} color={G}/>}
             </div>
 
-            {gs.playerMelds.map((m,i)=><MeldRow key={i} cards={m} index={i} color={N}/>)}
+            {gs.playerMelds.map((m,i)=>(
+              <div key={i}>
+                <MeldRow cards={m} index={i} color={N}/>
+                {phase==='meld' && selected.length>0 && (
+                  <div style={{ marginTop:-2, marginBottom:6, paddingLeft:4 }}>
+                    <button style={{ ...btnStyle('neon'), fontSize:10, padding:'3px 10px' }}
+                      onClick={()=>addToOwnMeld(i)}>
+                      ＋ Add {selected.length} card{selected.length>1?'s':''} to this meld
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
 
             <div style={{ display:'flex', flexWrap:'wrap', gap:6,
               minHeight:100, alignItems:'flex-end', paddingTop:4 }}>
@@ -882,7 +978,7 @@ export default function RummyGame({ onQuit }) {
             {phase==='meld' && (
               <div style={{ fontSize:10, color:M, marginTop:8,
                 fontFamily:'"Courier New",monospace', letterSpacing:.3 }}>
-                Click to select cards → form meld &nbsp;|&nbsp; Double-click or right-click to discard
+                Click to select → form new meld or extend existing &nbsp;|&nbsp; Double-click or right-click to discard
               </div>
             )}          </div>
 

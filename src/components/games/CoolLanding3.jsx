@@ -1,18 +1,8 @@
 import React, { useState } from "react";
 import "./CoolLanding3.css";
 
-import AdvancedPhysicsProblems from "./AdvancedPhysicsProblems";
-import AdvancedChemistryProblems from "./AdvancedChemistryProblems";
-import AdvancedCalculusProblems from "./AdvancedCalculusProblems";
-import AdvancedAlgebraProblems from "./AdvancedAlgebraProblems";
-import Game24Problems from "./Game24Problems";
 
-import Twenty_Four_Game_01 from "./Twenty_Four_Game_01/Twenty_Four_Game_01";
-import Twenty_Four_Game_02 from "./Twenty_Four_Game_01/Twenty_Four_Game_02";
 
-import Suduko_Game_01 from "./Suduko_Game_01/Suduko_Game_01";
-
-import calculus_game_01 from "./calculus/calculus_game_01/calculus_game_01";
 
 import twenty_four_v2 from "./twenty_four_v2/twenty_four_v2";
 
@@ -61,12 +51,9 @@ import mahjong_tiles_game_v2_01 from "./mahjong_tiles_game_v2_01/mahjong_tiles_g
 
 import Collapse_Through_Symbol_sacred_geometry from "./Collapse_Through_Symbol_sacred_geometry_v01/Collapse_Through_Symbol_sacred_geometry";
 
-import test_loop from "./tarot_game_v6_01/test_loop";
 
 
-import QuantumImpact_v1_01 from "./tarot_game_v6_01/QuantumImpact_v1_01";
 
-import DeckManager_v1_01 from "./tarot_game_v6_01/DeckManager_v1_01";
 
 
 
@@ -75,15 +62,7 @@ import DeckManager_v1_01 from "./tarot_game_v6_01/DeckManager_v1_01";
 
 /* === Registry: key -> {label, component} === */
 const GAME_REGISTRY = {
-  physics:          { label: "⚛️ Physics",        component: AdvancedPhysicsProblems },
-  chemistry:        { label: "🧪 Chemistry",      component: AdvancedChemistryProblems },
-  calculus:         { label: "∫ Calculus",         component: AdvancedCalculusProblems },
-  algebra:          { label: "📐 Algebra",         component: AdvancedAlgebraProblems },
-  game24:           { label: "🎲 Game 24",         component: Game24Problems },
-  twentyfour01:     { label: "🎲 24 Game (v1)",    component: Twenty_Four_Game_01 },
-  twentyfour02:     { label: "🎲 24 Game (v2)",    component: Twenty_Four_Game_02 },
-  sudoku01:         { label: "🔢 Sudoku",          component: Suduko_Game_01 },
-  calculus_game_01: { label: "∫ Calculus Game",    component: calculus_game_01 },
+
   twenty_four_v2:   { label: "🎲 24 Game (v3)",    component: twenty_four_v2 },
   rummy:            { label: "🃏 Rummy",            component: RummyGame },
   tangram_tiles:    { label: "🔷 Tangram Tiles",    component: TangramTilesGame_2 },
@@ -105,9 +84,7 @@ const GAME_REGISTRY = {
   collapse_through_symbol_v8_01: { label: "🌀 Collapse Through Symbol v8", component: Collapse_Through_Symbol_v8_01 },
   mahjong_tiles_game_v2_01: { label: "🀄 Mahjong Tiles Game v2", component: mahjong_tiles_game_v2_01 },
   collapse_through_symbol_sacred_geometry: { label: "🌀 Collapse Through Symbol: Sacred Geometry", component: Collapse_Through_Symbol_sacred_geometry },
-  test_loop:        { label: "🔄 Test Loop",         component: test_loop },
-  quantum_impact_v1_01: { label: "⚛️ Quantum Impact v1", component: QuantumImpact_v1_01 },
-  deck_manager_v1_01: { label: "🃏 Deck Manager v1", component: DeckManager_v1_01 },
+
 
 
 

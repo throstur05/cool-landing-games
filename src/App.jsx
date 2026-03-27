@@ -3,9 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import CoolLanding3 from './components/games/CoolLanding3.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
+    return <CoolLanding3 />
 
   return (
     <>
